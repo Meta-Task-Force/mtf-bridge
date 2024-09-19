@@ -8,6 +8,15 @@ elseif Config.Framework == "qbox" then
     Core = exports['qbox-core']:getCoreObject()
 end
 
+exports("GetPlayerJob", function()
+    if Config.Framework == "qb" then
+        return Core.Functions.GetPlayerData().job.name
+    elseif Config.Framework == "esx" then
+        return Core.GetPlayerData().job.name
+    end
+    return nil
+end)
+
 exports("GetPlayerCitizenID", function(text, duration)
     if Config.Framework == "qb" then
         return Core.Functions.GetPlayerData().citizenid

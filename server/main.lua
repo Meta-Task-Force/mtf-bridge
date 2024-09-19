@@ -25,6 +25,38 @@ exports("GetPlayer", function(src)
     return nil
 end)
 
+-- exports("GetPlayerID", function()
+--     local Player = exports['mtf-bridge']:GetPlayer(src)
+--     if Config.Framework == "qb" then
+--         return Player.PlayerData.source
+--     elseif Config.Framework == "esx" then
+--         return Player.source
+--     end
+--     return nil
+-- end)
+
+
+exports("GetPlayerJob", function(src)
+    local Player = exports['mtf-bridge']:GetPlayer(src)
+    if Config.Framework == "qb" then
+        return Player.PlayerData.job.name
+    elseif Config.Framework == "esx" then
+        return Player.job
+    end
+    return nil
+end)
+
+exports("GetPlayerJobGrade", function(src)
+    local Player = exports['mtf-bridge']:GetPlayer(src)
+    if Config.Framework == "qb" then
+        return Player.PlayerData.job.grade
+    elseif Config.Framework == "esx" then
+        return Player.job.job_grade
+    end
+    return nil
+end)
+
+
 exports("GetPlayerName", function(src)
     local Player = exports['mtf-bridge']:GetPlayer(src)
     if Config.Framework == 'qb' then
