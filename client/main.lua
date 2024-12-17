@@ -36,8 +36,9 @@ exports("GetPlayerCitizenID", function(text, duration)
 end)
 
 exports("AddSphereZone", function(options)
+    print('Options:'..json.encode(options))
     local zoneid = nil
-    if TargetSystem == 'ox_target' then
+    if Target == 'ox_target' then
         zoneid = exports.ox_target:addSphereZone({
             name = options.name,
             coords = options.coords,
@@ -45,14 +46,16 @@ exports("AddSphereZone", function(options)
             options = options.options,
             debug = options.debug 
         })
-    elseif TargetSystem == 'qb-target' then
-        zoneid = exports['qb-target']:AddCircleZone(options.name, options.center, options.radius, {
-            name = options.name,
-            debugPoly = options.debug,  
-            useZ = true
+    elseif Target == 'qb-target' then
+        zoneid = exports['qb-target']:AddCircleZone(options.name, options.coords, options.radius, {
+          name = options.name, 
+          debugPoly = true, 
         }, {
-            options = options.options,
-            distance = options.radius
+          options = { 
+                options = options.options,
+                distance = options.radius
+          },
+          distance = 5.0, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
         })
     end
 
@@ -60,29 +63,36 @@ exports("AddSphereZone", function(options)
 end)
 
 
-exports("AddTargetEntity", function(entity, options, distance)
-    if TargetSystem == 'ox_target' then
+exports("AddTargetEntity", function(entity, options)
+    if Target == 'ox_target' then
+        -- ox_target expects `options` directly as it is
         exports.ox_target:addLocalEntity(entity, options)
-    elseif TargetSystem == 'qb-target' then
+    elseif Target == 'qb-target' then
+        -- qb-target expects `options` wrapped inside an array structure
+        print(json.encode(options))
         exports['qb-target']:AddTargetEntity(entity, {
-            options = options,
-            distance = distance or 5
-        })
+            {
+                label = options.label,
+                icon = options.icon,
+                action = options.onSelect,
+            }
+        }, options.distance or 3)
     end
 end)
-
 exports("RemoveTargetEntity", function(entity, options)
-    if TargetSystem == 'ox_target' then
+    print('Options:'..json.encode(options))
+    if Target == 'ox_target' then
         exports.ox_target:removeEntity(entity, options)
-    elseif TargetSystem == 'qb-target' then
+    elseif Target == 'qb-target' then
         exports['qb-target']:RemoveTargetEntity(entity)
     end
 end)
 
 exports("RemoveZone", function(zone)
-    if TargetSystem == 'ox_target' then
+    print(zone)
+    if Target == 'ox_target' then
         exports.ox_target:removeZone(zone)
-    elseif TargetSystem == 'qb-target' then
+    elseif Target == 'qb-target' then
         exports['qb-target']:RemoveZone(zone)
     end
 end)

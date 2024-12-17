@@ -79,20 +79,20 @@ end)
 
 exports("GetPlayerFromCitizenID", function(citizenid)
     if Config.Framework == 'qb' then
-        return QBCore.Functions.GetPlayerByCitizenId(citizenid)
+        return Core.Functions.GetPlayerByCitizenId(citizenid)
     elseif Config.Framework == 'esx' then
-        return ESX.GetPlayerFromIdentifier(citizenid)
+        return Core.GetPlayerFromIdentifier(citizenid)
     end
     return false
 end)
 
-exports("Notify", function(src, message, type, duration)
+exports("ServerNotify", function(src, message, notitype, duration)
     if Config.Notify == 'ox' then 
         TriggerClientEvent('ox_lib:notify', src, {description = message, duration = duration})
     elseif Config.Notify == 'qb' then
-        TriggerClientEvent('QBCore:Notify', src, message, type, duration)
+        TriggerClientEvent('QBCore:Notify', src, message, notitype, duration)
     elseif Config.Notify == 'esx' then 
-        TriggerClientEvent('esx:showNotification', src, message, type, duration)
+        TriggerClientEvent('esx:showNotification', src, message, notitype, duration)
     end
 end)
 
@@ -118,10 +118,10 @@ exports("AddEconomy", function(src, type, amt)
     end
 end)
 
-exports("RemoveEconomy", function(src, type, amt)
+exports("RemoveEconomy", function(src, type, amt, text)
     local Player = exports['mtf-bridge']:GetPlayer(src)
     if Config.Framework == "qb" then
-        Player.Functions.RemoveMoney(type, amt)
+        Player.Functions.RemoveMoney(type, amt, (text or 'Unknown'))
     elseif Config.Framework == "esx" then
         local xPlayer = ESX.GetPlayerFromId(src)
         xPlayer.removeAccountMoney(type, amt)
